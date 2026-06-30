@@ -1,0 +1,52 @@
+{
+  "source": "eightfold_ats",
+  "exported_at": "2025-06-28T10:15:00Z",
+  "candidates": [
+    {
+      "candidate_id": "EF-284719",
+      "full_name": "Rahul Kumar",
+      "email": "rahul@GMAIL.com",
+      "phone": "98765 43210",
+      "location": {
+        "city": "Bangalore",
+        "state": "Karnataka",
+        "country": "India"
+      },
+      "experience": [
+        {
+          "company": "TechNova Solutions",
+          "title": "Software Engineer",
+          "start_date": "2024-04",
+          "end_date": null,
+          "is_current": true,
+          "description": "Backend services in Python; REST APIs and PostgreSQL."
+        },
+        {
+          "company": "Infosys",
+          "title": "Software Engineer",
+          "start_date": "2021-07",
+          "end_date": "2024-03",
+          "is_current": false,
+          "description": "Enterprise web applications; unit testing and code reviews."
+        }
+      ],
+      "education": [
+        {
+          "institution": "RV College of Engineering",
+          "degree": "B.Tech",
+          "field_of_study": "Computer Science",
+          "start_date": "2017-08",
+          "end_date": "2021-05"
+        }
+      ],
+      "skills": [
+        "CPP",
+        "JS",
+        "py",
+        "React",
+        "SQL",
+        "Git"
+      ]
+    }
+  ]
+}

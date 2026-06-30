@@ -1,0 +1,25 @@
+{
+  "include_confidence": true,
+  "include_provenance": true,
+  "fields": [
+    "candidate_id",
+    "full_name",
+    "email",
+    "phone",
+    "location",
+    "experience",
+    "education",
+    "skills",
+    "github_url"
+  ],
+  "rename": {
+    "full_name": "name",
+    "github_url": "github"
+  },
+  "on_missing": {
+    "default": "omit",
+    "github_url": "null",
+    "phone": "null",
+    "location": "empty_object"
+  }
+}

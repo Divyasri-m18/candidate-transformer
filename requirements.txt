@@ -1,0 +1,5 @@
+# PDF text extraction
+pdfplumber>=0.11.0
+
+# Development / testing (optional)
+pytest>=8.0.0
