@@ -1,56 +1,173 @@
 # Multi-Source Candidate Data Transformer
 
-An Eightfold AI internship assignment that reads candidate data from multiple sources (structured ATS JSON and unstructured resume PDF), normalizes and merges records, and produces a canonical candidate JSON output.
+A Python-based data transformation pipeline built as part of the Eightfold AI Internship Assignment.
+
+The project consolidates candidate information from multiple heterogeneous sources, normalizes inconsistent data, resolves conflicts deterministically, tracks provenance and confidence, and produces a configurable canonical JSON profile.
+
+---
+
+## Features
+
+- Parse structured ATS JSON records
+- Extract candidate details from Resume PDF
+- Normalize emails, phone numbers, dates, names, and skills
+- Detect duplicate candidate profiles
+- Deterministic conflict resolution
+- Confidence scoring
+- Provenance tracking
+- Configurable output projection
+- Command Line Interface (CLI)
+
+---
 
 ## Project Structure
 
 ```
 candidate-transformer/
-├── inputs/          # Sample input files (ATS JSON, resume PDF)
-├── output/          # Generated canonical candidate JSON
-├── config/          # Output projection configuration
-├── src/             # Application source code
-├── tests/           # Unit and integration tests
+│
+├── inputs/
+│   ├── ats.json
+│   └── resume.pdf
+│
+├── output/
+│
+├── config/
+│   └── output_config.json
+│
+├── src/
+│   ├── parser.py
+│   ├── normalizer.py
+│   ├── merger.py
+│   ├── confidence.py
+│   ├── projector.py
+│   ├── schema.py
+│   └── main.py
+│
+├── tests/
+│
 ├── requirements.txt
 └── README.md
 ```
 
-## Setup
+---
+
+## Installation
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate   # Windows
+```
+
+Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
+---
+
 ## Usage
 
-Run the transformer pipeline:
+Run with default inputs
 
 ```bash
-python -m src.main [arguments]
+python -m src.main
 ```
 
-### CLI Arguments
+Run with custom inputs
 
-- `--ats PATH`: Path to ATS JSON input file (default: `inputs/ats.json`).
-- `--resume PATH`: Path to Resume PDF input file (default: `inputs/resume.pdf`).
-- `--config PATH`: Path to projection configuration JSON file (default: `config/output_config.json`).
-- `--output PATH`: Path to save the final projected JSON file (default: `output/final_candidate.json`).
+```bash
+python -m src.main \
+  --ats inputs/ats.json \
+  --resume inputs/resume.pdf \
+  --config config/output_config.json \
+  --output output/final_candidate.json
+```
 
-To view the help menu:
+Show CLI help
 
 ```bash
 python -m src.main --help
 ```
 
-## Status
+---
 
-- [x] Step 1: Project structure and placeholder modules
-- [x] Step 2: Parser Component
-- [x] Step 3: Normalization Component
-- [x] Step 4: CLI Orchestration (Step 4 check)
-- [x] Step 5: Merge Layer & Confidence Scoring
-- [x] Step 6: Output Projection Layer
-- [x] Step 7: Command Line Interface (CLI)
+## Pipeline
 
+```
+ATS JSON
+          \
+           \
+            Parse
+              │
+              ▼
+         Normalize
+              │
+              ▼
+ Merge & Conflict Resolution
+              │
+              ▼
+ Confidence & Provenance
+              │
+              ▼
+ Projection Layer
+              │
+              ▼
+ Canonical JSON Output
+```
+
+---
+
+## Technologies Used
+
+- Python 3.11+
+- pdfplumber
+- argparse
+- JSON
+- Regular Expressions
+
+---
+
+## Output
+
+The transformer produces a configurable canonical candidate profile in JSON format.
+
+Features include:
+
+- Configurable field projection
+- Field renaming
+- Confidence metadata
+- Provenance metadata
+- Deterministic output
+
+---
+
+## Assignment Coverage
+
+- ✅ Structured source (ATS JSON)
+- ✅ Unstructured source (Resume PDF)
+- ✅ Parsing
+- ✅ Normalization
+- ✅ Duplicate detection
+- ✅ Conflict resolution
+- ✅ Confidence scoring
+- ✅ Provenance tracking
+- ✅ Configurable output
+- ✅ Command Line Interface
+
+---
+
+## Future Improvements
+
+- GitHub API integration
+- LinkedIn integration
+- Additional ATS connectors
+- Batch processing
+- REST API service
+
+---
