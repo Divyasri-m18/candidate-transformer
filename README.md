@@ -1,38 +1,60 @@
 # Multi-Source Candidate Data Transformer
 
-A Python-based data transformation pipeline built as part of the Eightfold AI Internship Assignment.
+A Python-based candidate data transformation pipeline built for the Eightfold Engineering Internship Assignment.
 
-The project consolidates candidate information from multiple heterogeneous sources, normalizes inconsistent data, resolves conflicts deterministically, tracks provenance and confidence, and produces a configurable canonical JSON profile.
+The project ingests candidate information from multiple heterogeneous sources, normalizes inconsistent data, detects duplicate candidates, resolves conflicting values, tracks provenance and confidence, and generates a configurable canonical candidate profile in JSON format.
 
 ---
 
-## Features
+# Features
 
-- Parse structured ATS JSON records
-- Extract candidate details from Resume PDF
-- Normalize emails, phone numbers, dates, names, and skills
-- Detect duplicate candidate profiles
-- Deterministic conflict resolution
+- Supports multiple data sources
+  - Structured ATS JSON
+  - Unstructured Resume PDF
+  - GitHub Public REST API (Optional)
+
+- Rule-based deterministic parsing
+
+- Data normalization
+  - Email normalization
+  - Phone number normalization (E.164)
+  - Skill canonicalization
+  - Name normalization
+  - Date normalization
+
+- Duplicate candidate detection
+
+- Conflict resolution
+
 - Confidence scoring
+
 - Provenance tracking
+
 - Configurable output projection
+
 - Command Line Interface (CLI)
 
+- Minimal Gradio Web UI
+
 ---
 
-## Project Structure
+# Project Structure
 
 ```
 candidate-transformer/
+│
+├── config/
+│   └── output_config.json
+│
+├── images/
+│   └── final-output.png
 │
 ├── inputs/
 │   ├── ats.json
 │   └── resume.pdf
 │
 ├── output/
-│
-├── config/
-│   └── output_config.json
+│   └── final_candidate.json
 │
 ├── src/
 │   ├── parser.py
@@ -41,26 +63,94 @@ candidate-transformer/
 │   ├── confidence.py
 │   ├── projector.py
 │   ├── schema.py
+│   ├── utils.py
 │   └── main.py
 │
 ├── tests/
 │
+├── app.py
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## Installation
+# Pipeline
+
+```
+ATS JSON
+        │
+Resume PDF
+        │
+GitHub API (Optional)
+        │
+        ▼
+      Parser
+        ▼
+   Normalizer
+        ▼
+Duplicate Detection
+        ▼
+ Conflict Resolution
+        ▼
+ Confidence Scoring
+        ▼
+ Provenance Tracking
+        ▼
+ Output Projection
+        ▼
+ Canonical Candidate JSON
+```
+
+---
+
+# Technologies Used
+
+- Python 3.x
+- Gradio
+- pdfplumber
+- Requests
+- JSON
+- Regular Expressions (re)
+- argparse
+- pathlib
+- dataclasses
+
+---
+
+# Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/Divyasri-m18/candidate-transformer.git
+```
+
+Move into the project
+
+```bash
+cd candidate-transformer
+```
+
+Create virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
+Activate virtual environment
+
 Windows
 
 ```bash
 .venv\Scripts\activate
+```
+
+Linux / macOS
+
+```bash
+source .venv/bin/activate
 ```
 
 Install dependencies
@@ -71,111 +161,181 @@ pip install -r requirements.txt
 
 ---
 
-## Usage
+# Running the CLI
 
-Run with default inputs
+Run the complete transformation pipeline
 
 ```bash
 python -m src.main
 ```
 
-Run with custom inputs
-
-```bash
-python -m src.main \
-  --ats inputs/ats.json \
-  --resume inputs/resume.pdf \
-  --config config/output_config.json \
-  --output output/final_candidate.json
-```
-
-Show CLI help
+Show help
 
 ```bash
 python -m src.main --help
 ```
 
----
+Using GitHub API
 
-## Pipeline
-
-```
-ATS JSON
-          \
-           \
-            Parse
-              │
-              ▼
-         Normalize
-              │
-              ▼
- Merge & Conflict Resolution
-              │
-              ▼
- Confidence & Provenance
-              │
-              ▼
- Projection Layer
-              │
-              ▼
- Canonical JSON Output
+```bash
+python -m src.main --github Divyasri-m18
 ```
 
 ---
 
-## Technologies Used
+# Running the Gradio UI
 
-- Python 3.11+
-- pdfplumber
-- argparse
-- JSON
-- Regular Expressions
+Start the web application
 
----
+```bash
+python app.py
+```
 
-## Output
+Open the local URL displayed in the terminal (typically):
 
-The transformer produces a configurable canonical candidate profile in JSON format.
+```
+http://127.0.0.1:7860
+```
 
-Features include:
+Upload:
 
-- Configurable field projection
-- Field renaming
-- Confidence metadata
-- Provenance metadata
-- Deterministic output
+- ATS JSON
+- Resume PDF
+- Optional GitHub Username
 
----
-
-## Assignment Coverage
-
-- ✅ Structured source (ATS JSON)
-- ✅ Unstructured source (Resume PDF)
-- ✅ Parsing
-- ✅ Normalization
-- ✅ Duplicate detection
-- ✅ Conflict resolution
-- ✅ Confidence scoring
-- ✅ Provenance tracking
-- ✅ Configurable output
-- ✅ Command Line Interface
+Click **Transform Candidate** to generate the canonical candidate profile.
 
 ---
 
-## Future Improvements
+# Data Sources
 
-- GitHub API integration
-- LinkedIn integration
-- Additional ATS connectors
-- Batch processing
-- REST API service
+## Structured Source
+
+- ATS JSON
+
+## Unstructured Sources
+
+- Resume PDF
+- GitHub Public REST API
 
 ---
+
+# Normalization
+
+The project uses a deterministic rule-based normalization approach.
+
+Implemented normalizations include:
+
+- Email → Lowercase
+- Phone → E.164 format
+- Skills → Canonical mapping
+- Names → Trim + Title Case
+- Dates → YYYY-MM
+
 ---
 
-## Screenshot
+# Duplicate Detection Strategy
 
-### Final Output
+Candidate records are matched using deterministic priority:
 
-The following screenshot shows the successful execution of the candidate transformation pipeline and the generated canonical JSON output.
+1. Email
+2. Phone Number
+3. Normalized Full Name (Fallback)
+
+---
+
+# Conflict Resolution
+
+When multiple sources contain different values:
+
+Priority:
+
+```
+Resume
+    ↓
+ATS
+    ↓
+GitHub
+```
+
+The highest priority value is selected while preserving provenance and confidence information.
+
+---
+
+# Confidence Scoring
+
+Confidence is assigned based on source reliability.
+
+Example
+
+| Source | Confidence |
+|---------|-----------:|
+| ATS JSON | 0.95 |
+| Resume PDF | 0.85 |
+| GitHub | 0.75 |
+
+---
+
+# Output
+
+The pipeline generates a canonical JSON profile.
+
+Example output
+
+```
+output/
+    final_candidate.json
+```
+
+---
+
+# Screenshots
+
+## Final Output
+
+The screenshot below shows the successful execution of the candidate transformation pipeline.
+
 ![Final Output](images/final-output.png)
+
+---
+
+# Future Improvements
+
+- LinkedIn API Integration
+- Additional ATS Connectors
+- Batch Processing
+- REST API Service
+- Docker Support
+- Database Persistence
+
+---
+
+# Assignment Requirements Covered
+
+- Structured Source
+- Unstructured Source
+- Multi-source Parsing
+- Data Normalization
+- Duplicate Detection
+- Conflict Resolution
+- Confidence Scoring
+- Provenance Tracking
+- Configurable Projection
+- CLI
+- Minimal UI
+
+---
+
+# Author
+
+**Divyasri M**
+
+GitHub
+
+https://github.com/Divyasri-m18
+
+---
+
+# License
+
+This project was developed as part of the Eightfold Engineering Internship Assignment.
