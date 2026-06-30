@@ -179,4 +179,4 @@ Features include:
 
 The following screenshot shows the successful execution of the candidate transformation pipeline and the generated canonical JSON output.
 
-![Final Output](images/Final Output JSON.png)
+![Final Output](images/final-output.png)
