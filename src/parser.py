@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 import pdfplumber
+import requests
 
 from .utils import clean_string, read_json_file
 
@@ -416,3 +417,70 @@ def _parse_education(section_text: str) -> list[dict[str, Any]]:
         )
 
     return entries
+
+
+def extract_github_username(url_or_username: str) -> str:
+    """Extract a GitHub username from a profile URL or clean username string."""
+    cleaned = url_or_username.strip().strip("/")
+    if "github.com" in cleaned:
+        parts = cleaned.split("github.com/")
+        if len(parts) > 1:
+            subparts = parts[1].split("/")
+            return subparts[0]
+    return cleaned
+
+
+def read_github_profile(username_or_url: str) -> dict[str, Any]:
+    """
+    Fetch and parse candidate data from the public GitHub REST API.
+
+    Args:
+        username_or_url: GitHub profile URL or direct username string.
+
+    Returns:
+        Dictionary containing GitHub profile fields.
+
+    Raises:
+        ParserError: For invalid username, network errors, rate limit issues, or API failures.
+    """
+    username = extract_github_username(username_or_url)
+    if not username:
+        raise ParserError("Invalid GitHub username or URL provided.")
+
+    url = f"https://api.github.com/users/{username}"
+    headers = {"User-Agent": "Multi-Source-Candidate-Data-Transformer"}
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        if response.status_code == 404:
+            raise ParserError(f"GitHub user not found: '{username}'")
+        elif response.status_code == 403:
+            raise ParserError(f"GitHub API error (403 Forbidden): Rate limit exceeded or access denied.")
+        elif response.status_code != 200:
+            raise ParserError(f"GitHub API returned HTTP status {response.status_code}: {response.reason}")
+
+        data = response.json()
+    except requests.exceptions.Timeout as exc:
+        raise ParserError(f"Connection timeout trying to fetch GitHub profile for '{username}': {exc}")
+    except requests.exceptions.RequestException as exc:
+        raise ParserError(f"Network failure trying to contact GitHub REST API: {exc}")
+    except ValueError as exc:
+        raise ParserError(f"Malformed JSON response from GitHub API: {exc}")
+
+    full_name = data.get("name") or data.get("login") or ""
+
+    return {
+        "full_name": full_name,
+        "github_url": data.get("html_url") or f"https://github.com/{username}",
+        "location": data.get("location") or "",
+        "bio": data.get("bio") or "",
+        "company": data.get("company") or "",
+        "public_repos": data.get("public_repos") or 0,
+        "_source": {
+            "type": "github",
+            "path": url,
+            "username": username,
+        }
+    }
+

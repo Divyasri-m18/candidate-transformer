@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from .normalizer import normalize_candidate
-from .parser import read_ats_json, read_resume_pdf, ParserError
+from .parser import read_ats_json, read_resume_pdf, read_github_profile, ParserError
 from .merger import merge_candidates
 from .projector import load_output_config, project_candidates
 from .utils import write_json_file
@@ -74,11 +74,17 @@ def main() -> int:
         default=str(DEFAULT_OUTPUT_PATH),
         help="Path to save the projected output JSON file."
     )
+    parser.add_argument(
+        "--github",
+        type=str,
+        default=None,
+        help="GitHub profile URL or username (optional third data source)."
+    )
 
     args = parser.parse_args()
 
     try:
-        # 1. Parse
+        # 1. Parse & Normalize
         raw_ats = read_ats_json(args.ats)
         raw_resume = read_resume_pdf(args.resume)
 
@@ -90,8 +96,17 @@ def main() -> int:
         normalized_ats["_raw"] = raw_ats
         normalized_resume["_raw"] = raw_resume
 
+        candidates_to_merge = [normalized_ats, normalized_resume]
+
+        # Optional GitHub profile integration
+        if args.github:
+            raw_github = read_github_profile(args.github)
+            normalized_github = normalize_candidate(raw_github)
+            normalized_github["_raw"] = raw_github
+            candidates_to_merge.append(normalized_github)
+
         # 3. Merge
-        merged_list = merge_candidates([normalized_ats, normalized_resume])
+        merged_list = merge_candidates(candidates_to_merge)
 
         # 4. Project
         try:

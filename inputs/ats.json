@@ -1,42 +1,42 @@
 {
   "source": "eightfold_ats",
-  "exported_at": "2025-06-28T10:15:00Z",
+  "exported_at": "2026-06-30T10:15:00Z",
   "candidates": [
     {
-      "candidate_id": "EF-284719",
-      "full_name": "Rahul Kumar",
-      "email": "rahul@GMAIL.com",
-      "phone": "98765 43210",
+      "candidate_id": "EF-994472",
+      "full_name": "Divyasri M.",
+      "email": "DIVYASRI.M018@gmail.com",
+      "phone": "+91 99447 23017",
       "location": {
-        "city": "Bangalore",
-        "state": "Karnataka",
+        "city": "Coimbatore",
+        "state": "Tamil Nadu",
         "country": "India"
       },
       "experience": [
         {
-          "company": "TechNova Solutions",
-          "title": "Software Engineer",
-          "start_date": "2024-04",
-          "end_date": null,
-          "is_current": true,
-          "description": "Backend services in Python; REST APIs and PostgreSQL."
+          "company": "Deepfake Video Detection System",
+          "title": "PROJECTS",
+          "start_date": "2025-12",
+          "end_date": "2025-12",
+          "is_current": false,
+          "description": "Deepfake detection system using PyTorch and OpenCV. Features a Streamlit-based UI for model evaluation and inference."
         },
         {
-          "company": "Infosys",
-          "title": "Software Engineer",
-          "start_date": "2021-07",
-          "end_date": "2024-03",
+          "company": "E-commerce Website",
+          "title": "PROJECTS",
+          "start_date": "2025-12",
+          "end_date": "2025-12",
           "is_current": false,
-          "description": "Enterprise web applications; unit testing and code reviews."
+          "description": "Full-stack e-commerce application built with React, Node.js, Express, and MongoDB. Includes JWT authentication."
         }
       ],
       "education": [
         {
-          "institution": "RV College of Engineering",
-          "degree": "B.Tech",
-          "field_of_study": "Computer Science",
-          "start_date": "2017-08",
-          "end_date": "2021-05"
+          "institution": "KIT - Kalaignarkarunanidhi Institute of Technology",
+          "degree": "B.E. Computer Science and Engineering",
+          "field_of_study": "Computer Science and Engineering",
+          "start_date": "2022-08",
+          "end_date": "2026-05"
         }
       ],
       "skills": [
@@ -45,7 +45,119 @@
         "py",
         "React",
         "SQL",
+        "Git",
+        "MongoDB"
+      ]
+    },
+    {
+      "candidate_id": "EF-111111",
+      "full_name": "Rahul Kumar",
+      "email": "rahul.kumar@example.com",
+      "phone": "+91 98765 43210",
+      "location": {
+        "city": "Bangalore",
+        "state": "Karnataka",
+        "country": "India"
+      },
+      "experience": [
+        {
+          "company": "TechCorp Solutions",
+          "title": "Senior Software Engineer",
+          "start_date": "2023-01",
+          "end_date": null,
+          "is_current": true,
+          "description": "Led backend development for microservices using Django and PostgreSQL."
+        }
+      ],
+      "education": [
+        {
+          "institution": "RV College of Engineering",
+          "degree": "B.Tech",
+          "field_of_study": "Computer Science",
+          "start_date": "2018-08",
+          "end_date": "2022-05"
+        }
+      ],
+      "skills": [
+        "Python",
+        "Django",
+        "PostgreSQL",
+        "Docker",
         "Git"
+      ]
+    },
+    {
+      "candidate_id": "EF-222222",
+      "full_name": "Priya Sharma",
+      "email": "priya.sharma@example.com",
+      "phone": "+1 415 555 2671",
+      "location": {
+        "city": "San Francisco",
+        "state": "California",
+        "country": "USA"
+      },
+      "experience": [
+        {
+          "company": "JavaSoft Corp",
+          "title": "Software Engineer",
+          "start_date": "2021-06",
+          "end_date": "2023-12",
+          "is_current": false,
+          "description": "Designed enterprise APIs using Java and Spring Boot framework."
+        }
+      ],
+      "education": [
+        {
+          "institution": "San Jose State University",
+          "degree": "MS",
+          "field_of_study": "Software Engineering",
+          "start_date": "2019-09",
+          "end_date": "2021-05"
+        }
+      ],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Kubernetes",
+        "AWS",
+        "SQL"
+      ]
+    },
+    {
+      "candidate_id": "EF-333333",
+      "full_name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+44 20 7946 0958",
+      "location": {
+        "city": "London",
+        "state": "Greater London",
+        "country": "UK"
+      },
+      "experience": [
+        {
+          "company": "CloudInc Ltd",
+          "title": "Solutions Architect",
+          "start_date": "2020-03",
+          "end_date": null,
+          "is_current": true,
+          "description": "Architected hybrid cloud architectures on Microsoft Azure platform."
+        }
+      ],
+      "education": [
+        {
+          "institution": "University College London",
+          "degree": "B.Sc.",
+          "field_of_study": "Information Management for Business",
+          "start_date": "2016-09",
+          "end_date": "2019-06"
+        }
+      ],
+      "skills": [
+        "C#",
+        ".NET Core",
+        "Azure",
+        "Terraform",
+        "Agile"
       ]
     }
   ]
