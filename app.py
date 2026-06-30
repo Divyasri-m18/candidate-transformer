@@ -18,7 +18,17 @@ from src.projector import load_output_config, project_candidates
 
 # Project default paths
 PROJECT_ROOT = Path(__file__).resolve().parent
-DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config" / "output_config.json"
+
+def get_default_config_path() -> Path:
+    path_in_config = PROJECT_ROOT / "config" / "output_config.json"
+    if path_in_config.exists():
+        return path_in_config
+    # Fallback to root directory
+    path_in_root = PROJECT_ROOT / "output_config.json"
+    if path_in_root.exists():
+        return path_in_root
+    return path_in_config  # returns default path if neither exists
+
 
 
 def process_pipeline(
@@ -59,10 +69,11 @@ def process_pipeline(
         merged_list = merge_candidates(candidates_to_merge)
 
         # 4. Project
-        if not DEFAULT_CONFIG_PATH.exists():
-            return f"Error: Configuration file not found at '{DEFAULT_CONFIG_PATH}'", None
+        config_path = get_default_config_path()
+        if not config_path.exists():
+            return f"Error: Configuration file not found at '{config_path}'", None
             
-        config = load_output_config(DEFAULT_CONFIG_PATH)
+        config = load_output_config(config_path)
         projected_list = project_candidates(merged_list, config)
 
         output_str = json.dumps(projected_list, indent=2, ensure_ascii=False)
