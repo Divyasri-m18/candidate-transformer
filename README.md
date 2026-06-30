@@ -1,40 +1,44 @@
 # Multi-Source Candidate Data Transformer
 
-A Python-based candidate data transformation pipeline built for the Eightfold Engineering Internship Assignment.
+A Python-based candidate data transformation pipeline developed for the **Eightfold Engineering Internship Assignment**.
 
-The project ingests candidate information from multiple heterogeneous sources, normalizes inconsistent data, detects duplicate candidates, resolves conflicting values, tracks provenance and confidence, and generates a configurable canonical candidate profile in JSON format.
+This project ingests candidate information from multiple heterogeneous sources, normalizes inconsistent data, detects duplicate candidate records, resolves conflicts deterministically, tracks provenance and confidence, and generates a canonical candidate profile in JSON format.
+
+---
+
+# 🌐 Live Demo
+
+### 🚀 Direct Application
+
+https://divyasri-18-candidate-transformer.hf.space/
+
+### 🤗 Hugging Face Space
+
+https://huggingface.co/spaces/Divyasri-18/candidate-transformer
+
+---
+
+# 📂 GitHub Repository
+
+https://github.com/Divyasri-m18/candidate-transformer
 
 ---
 
 # Features
 
-- Supports multiple data sources
-  - Structured ATS JSON
-  - Unstructured Resume PDF
-  - GitHub Public REST API (Optional)
-
-- Rule-based deterministic parsing
-
-- Data normalization
-  - Email normalization
-  - Phone number normalization (E.164)
-  - Skill canonicalization
-  - Name normalization
-  - Date normalization
-
+- Structured ATS JSON parsing
+- Resume PDF parsing
+- GitHub Public REST API integration
+- Deterministic rule-based parsing
+- Candidate data normalization
 - Duplicate candidate detection
-
 - Conflict resolution
-
 - Confidence scoring
-
 - Provenance tracking
-
 - Configurable output projection
-
 - Command Line Interface (CLI)
-
-- Minimal Gradio Web UI
+- Gradio Web Interface
+- Live deployment using Hugging Face Spaces
 
 ---
 
@@ -76,46 +80,61 @@ candidate-transformer/
 
 ---
 
-# Pipeline
+# Architecture
 
 ```
-ATS JSON
-        │
-Resume PDF
-        │
-GitHub API (Optional)
-        │
-        ▼
-      Parser
-        ▼
-   Normalizer
-        ▼
-Duplicate Detection
-        ▼
- Conflict Resolution
-        ▼
- Confidence Scoring
-        ▼
- Provenance Tracking
-        ▼
- Output Projection
-        ▼
- Canonical Candidate JSON
+                ATS JSON
+                    │
+                    │
+             Resume PDF
+                    │
+                    │
+          GitHub REST API
+                    │
+                    ▼
+               Parser Layer
+                    ▼
+          Normalization Layer
+                    ▼
+        Duplicate Detection
+                    ▼
+       Conflict Resolution
+                    ▼
+         Confidence Scoring
+                    ▼
+        Provenance Tracking
+                    ▼
+         Projection Layer
+                    ▼
+      Canonical Candidate JSON
 ```
+
+---
+
+# Data Sources
+
+## Structured Source
+
+- ATS JSON
+
+## Unstructured Sources
+
+- Resume PDF
+- GitHub Public REST API
 
 ---
 
 # Technologies Used
 
-- Python 3.x
+- Python 3
 - Gradio
 - pdfplumber
 - Requests
 - JSON
-- Regular Expressions (re)
 - argparse
 - pathlib
 - dataclasses
+- Regular Expressions (re)
 
 ---
 
@@ -169,13 +188,13 @@ Run the complete transformation pipeline
 python -m src.main
 ```
 
-Show help
+Display CLI help
 
 ```bash
 python -m src.main --help
 ```
 
-Using GitHub API
+Run using GitHub profile
 
 ```bash
 python -m src.main --github Divyasri-m18
@@ -183,108 +202,154 @@ python -m src.main --github Divyasri-m18
 
 ---
 
-# Running the Gradio UI
+# Running the Web UI
 
-Start the web application
+Launch the Gradio application
 
 ```bash
 python app.py
 ```
 
-Open the local URL displayed in the terminal (typically):
+Open your browser and visit
 
 ```
 http://127.0.0.1:7860
 ```
 
-Upload:
+or use the deployed application
 
-- ATS JSON
-- Resume PDF
-- Optional GitHub Username
-
-Click **Transform Candidate** to generate the canonical candidate profile.
+https://divyasri-18-candidate-transformer.hf.space/
 
 ---
 
-# Data Sources
+# Pipeline Overview
 
-## Structured Source
+### 1. Parsing
+
+The parser extracts candidate information from:
 
 - ATS JSON
-
-## Unstructured Sources
-
 - Resume PDF
-- GitHub Public REST API
+- GitHub Public API
+
+No AI models or OCR are used.
+
+Only deterministic parsing using:
+
+- Regular Expressions
+- String Processing
+- JSON Parsing
 
 ---
 
-# Normalization
+### 2. Normalization
 
-The project uses a deterministic rule-based normalization approach.
+The normalization layer standardizes candidate information before merging.
 
 Implemented normalizations include:
 
-- Email → Lowercase
-- Phone → E.164 format
-- Skills → Canonical mapping
-- Names → Trim + Title Case
-- Dates → YYYY-MM
+- Email normalization
+- Phone number conversion to E.164 format
+- Name normalization
+- Date normalization (YYYY-MM)
+- Skill canonicalization
+
+Example
+
+| Raw Value | Normalized |
+|------------|------------|
+| DIVYASRI.M018@gmail.com | divyasri.m018@gmail.com |
+| 99447 23017 | +919944723017 |
+| CPP | C++ |
+| JS | JavaScript |
+| py | Python |
 
 ---
 
-# Duplicate Detection Strategy
+# Duplicate Detection
 
 Candidate records are matched using deterministic priority:
 
-1. Email
+1. Email Address
 2. Phone Number
 3. Normalized Full Name (Fallback)
+
+This allows the pipeline to identify duplicate records across multiple sources while preserving unique candidates.
 
 ---
 
 # Conflict Resolution
 
-When multiple sources contain different values:
+When multiple sources contain different values, the pipeline resolves conflicts deterministically.
 
-Priority:
+Priority Order
 
 ```
-Resume
-    ↓
-ATS
-    ↓
-GitHub
+Resume PDF
+      ↓
+ATS JSON
+      ↓
+GitHub API
 ```
 
-The highest priority value is selected while preserving provenance and confidence information.
+The selected value is stored while preserving provenance and confidence information.
 
 ---
 
 # Confidence Scoring
 
-Confidence is assigned based on source reliability.
-
-Example
+Confidence scores indicate the reliability of each selected field.
 
 | Source | Confidence |
 |---------|-----------:|
 | ATS JSON | 0.95 |
 | Resume PDF | 0.85 |
-| GitHub | 0.75 |
+| GitHub API | 0.75 |
 
 ---
 
-# Output
+# Provenance Tracking
 
-The pipeline generates a canonical JSON profile.
+Every selected field stores its origin.
 
-Example output
+Example
+
+```json
+{
+  "email": {
+    "source": "resume_pdf",
+    "source_path": "inputs/resume.pdf",
+    "raw_value": "DIVYASRI.M018@gmail.com"
+  }
+}
+```
+
+---
+
+# Configurable Output Projection
+
+The output schema is configurable using:
 
 ```
-output/
-    final_candidate.json
+config/output_config.json
+```
+
+Supported features
+
+- Select output fields
+- Rename fields
+- Include or exclude confidence
+- Include or exclude provenance
+- Missing value strategies
+
+---
+
+# Example Output
+
+The pipeline generates a canonical candidate profile.
+
+```
+output/final_candidate.json
 ```
 
 ---
@@ -303,10 +368,10 @@ The screenshot below shows the successful execution of the candidate transformat
 
 - LinkedIn API Integration
 - Additional ATS Connectors
-- Batch Processing
+- Batch Candidate Processing
 - REST API Service
 - Docker Support
-- Database Persistence
+- Database Integration
 
 ---
 
@@ -315,14 +380,16 @@ The screenshot below shows the successful execution of the candidate transformat
 - Structured Source
 - Unstructured Source
 - Multi-source Parsing
+- Rule-based Parsing
 - Data Normalization
 - Duplicate Detection
 - Conflict Resolution
 - Confidence Scoring
 - Provenance Tracking
 - Configurable Projection
-- CLI
-- Minimal UI
+- Command Line Interface
+- Minimal Web UI
+- Live Deployment
 
 ---
 
@@ -334,8 +401,12 @@ GitHub
 
 https://github.com/Divyasri-m18
 
+Hugging Face
+
+https://huggingface.co/spaces/Divyasri-18/candidate-transformer
+
 ---
 
 # License
 
-This project was developed as part of the Eightfold Engineering Internship Assignment.
+This project was developed as part of the **Eightfold Engineering Internship Assignment** for educational and evaluation purposes.
